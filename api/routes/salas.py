@@ -1,16 +1,16 @@
 from fastapi import APIRouter
+from typing import List
 from schemas.sala import SalaCreate, SalaOut
+from services.reserva_service import service
 
 router = APIRouter(prefix="/salas", tags=["Salas"])
 
 
-@router.post("", response_model="SalaOut")
+@router.post("", response_model=SalaOut)
 def criar_sala_route(data: SalaCreate):
-    sala = sala(nome=data.nome, capacidade=data.capacidade, bloco=data.bloco)
-    db.criar_sala.get(sala)
+    sala = service.criar_sala(nome=data.nome, capacidade=data.capacidade, bloco=data.bloco)
     return sala
 
-
-@router.get("", response_model="SalaOut")
+@router.get("", response_model=List[SalaOut])
 def listar_salas_route():
-    return db.listar_salas()
+    return service.listar_salas()

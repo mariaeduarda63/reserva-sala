@@ -1,3 +1,4 @@
+from datetime import datetime
 class Reserva:
     def __init__(
         self,
@@ -18,13 +19,23 @@ class Reserva:
         self.status = status
 
     def cancelar(self):
-        pass
+        self.status = "Cancelado"
 
     def finalizar(self, hora_atual: str):
-        pass
+        if hora_atual >= self.hora_fim:
+            self.status = "Finalizado"
 
     def duracao_em_horas(self) -> float:
-        pass
+        fmt = "%H:%M"
+        inicio = datetime.strptime(self.hora_inicio, fmt)
+        fim = datetime.strptime(self.hora_fim, fmt)
+        duracao = fim - inicio
+        return duracao.total_seconds() / 3600
 
     def conflita_com(self, outra_reserva) -> bool:
-        pass
+        if self.data != outra_reserva.data:
+            return False
+        return not (
+            self.hora_fim <= outra_reserva.hora_inicio or
+            self.hora_inicio >= outra_reserva.hora.fim
+        )
